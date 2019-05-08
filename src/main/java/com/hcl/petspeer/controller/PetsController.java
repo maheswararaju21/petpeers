@@ -7,12 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hcl.petspeer.entity.PetUser;
 import com.hcl.petspeer.entity.Pets;
 import com.hcl.petspeer.service.PetUserService;
 import com.hcl.petspeer.service.PetsService;
@@ -36,15 +37,9 @@ public class PetsController {
 		return petsService.getAllPets();
 	}
 
-	@GetMapping(value = "/buypet/{petId}")
-	public ResponseEntity buypet(@PathVariable Long petId, @RequestParam String uname, @RequestParam String upass) {
-		Long flag = petUserService.getuNameAndUpassword(uname, upass);
-		if (flag != 1) {
-			return new ResponseEntity("signin for buying", HttpStatus.BAD_REQUEST);
-		}
-		PetUser puser = petUserService.findByUserName(uname);
-		Pets pet = petUserService.buyPet(petId, puser);
-return new ResponseEntity("pet added to list",HttpStatus.OK);
+	@PutMapping(value="/buypets/{petId}")
+	@ResponseBody ResponseEntity<String> buyPet(@PathVariable("petId") long petId,@RequestParam long userId){	
+		return new ResponseEntity<String>(petsService.buyPets(petId, userId),HttpStatus.OK);
 	}
 
 }

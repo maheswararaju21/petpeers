@@ -2,7 +2,6 @@ package com.hcl.petspeer.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,13 +9,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 @Table(name = "PETS")
 public class Pets {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "pet_id")
 	private Long id;
 
 	@Column(name = "PET_NAME")
@@ -27,10 +25,22 @@ public class Pets {
 
 	@Column(name = "PET_PLACE")
 	private String petPlace;
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "PETUSER_ID")
-	@JsonIgnore
-	private PetUser pUser;
+	@ManyToOne
+	@JoinColumn(name = "PET_USER_ID")
+	private PetUser petUser;
+
+	public Pets() {
+		super();
+	}
+
+	public Pets(Long id, String petName, int petAge, String petPlace, PetUser petUser) {
+		super();
+		this.id = id;
+		this.petName = petName;
+		this.petAge = petAge;
+		this.petPlace = petPlace;
+		this.petUser = petUser;
+	}
 
 	public Long getId() {
 		return id;
@@ -64,12 +74,12 @@ public class Pets {
 		this.petPlace = petPlace;
 	}
 
-	public PetUser getpUser() {
-		return pUser;
+	public PetUser getPetUser() {
+		return petUser;
 	}
 
-	public void setpUser(PetUser pUser) {
-		this.pUser = pUser;
+	public void setPetUser(PetUser petUser) {
+		this.petUser = petUser;
 	}
 
 }
